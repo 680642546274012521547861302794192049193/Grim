@@ -470,7 +470,10 @@ public class GrimPlayer implements GrimUser {
         }
 
         lastTransSent = System.currentTimeMillis();
-        short transactionID = (short) (-1 * (transactionIDCounter.getAndIncrement() & 0x7FFF));
+        transactionIDCounter.addAndGet(ThreadLocalRandom.current().nextInt(1, 5));
+        int current = transactionIDCounter.get();
+        short transactionID = (short) (current & 0xFFFF);
+
         try {
 
             PacketWrapper<?> packet;
