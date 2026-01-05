@@ -160,7 +160,7 @@ public class BlockProperties {
         return friction;
     }
 
-    private static StateType getOnBlock(GrimPlayer player, double x, double y, double z) {
+    public static StateType getOnBlock(GrimPlayer player, double x, double y, double z) {
         StateType block1 = player.compensatedWorld.getBlockType(GrimMath.floor(x), GrimMath.floor(y - 0.2F), GrimMath.floor(z));
 
         if (block1.isAir()) {

@@ -11,12 +11,14 @@ import ac.grim.grimac.utils.data.VectorData;
 import ac.grim.grimac.utils.math.GrimMath;
 import ac.grim.grimac.utils.math.Vector3dm;
 import ac.grim.grimac.utils.math.VectorUtils;
+import ac.grim.grimac.utils.nmsutil.BlockProperties;
 import ac.grim.grimac.utils.nmsutil.Collisions;
 import ac.grim.grimac.utils.nmsutil.GetBoundingBox;
 import ac.grim.grimac.utils.nmsutil.JumpPower;
 import ac.grim.grimac.utils.nmsutil.Riptide;
 import com.github.retrooper.packetevents.protocol.attribute.Attributes;
 import com.github.retrooper.packetevents.protocol.player.ClientVersion;
+import com.github.retrooper.packetevents.protocol.world.states.type.StateTypes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,8 +108,9 @@ public class PredictionEngine {
 
     public void guessBestMovement(float speed, GrimPlayer player) {
         Set<VectorData> init = fetchPossibleStartTickVectors(player);
-
-        if (player.uncertaintyHandler.influencedByBouncyBlock()) {
+        
+        boolean valid = BlockProperties.getOnBlock(player, player.x, player.y, player.z) == StateTypes.SLIME_BLOCK || (player.lastOnGround && !player.onGround);
+        if (player.uncertaintyHandler.influencedByBouncyBlock() && valid) {
             for (VectorData data : init) {
                 // Try to get the vector as close to zero as possible to give the best chance at 0.03...
                 Vector3dm toZeroVec = new PredictionEngine().handleStartingVelocityUncertainty(player, data, new Vector3dm(0, -1000000000, 0)); // Downwards without overflow risk
